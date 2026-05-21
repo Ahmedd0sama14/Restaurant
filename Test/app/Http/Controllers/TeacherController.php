@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTeacherRequest;
+use App\Http\Requests\UpdateHeaderRequest;
+use App\Http\Requests\UpdateTeacherRequest;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -12,7 +14,7 @@ class TeacherController extends Controller
 
 public function index()
     {
-        $teachers = Teacher::latest()->get();
+        $teachers = Teacher::latest()->paginate(10);
         return view('teacher.index', compact('teachers'));
     }
 
@@ -50,15 +52,18 @@ public function index()
      */
     public function edit(Teacher $teacher)
     {
-        //
+        return view('teacher.edit', compact('teacher'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Teacher $teacher)
+    public function update(UpdateTeacherRequest $request, Teacher $teacher)
     {
-        //
+        $data = $request->validated();
+        $data['password'] = Hash::make($data['password']);
+        $teacher->update($data);
+        return to_route('teachers.index')->with('success', 'Teacher updated successfully.');
     }
 
     /**
@@ -66,6 +71,7 @@ public function index()
      */
     public function destroy(Teacher $teacher)
     {
-        //
+        $teacher->delete();
+        return to_route('teachers.index')->with('success', 'Teacher deleted successfully.');
     }
 }
