@@ -3,14 +3,20 @@
 use App\Http\Controllers\Api\{AboutController, ContactController, CourseTypesController, HeaderController, TeacherController};
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\CourseSessionController;
-use App\Http\Controllers\StudentAuthController;
+use App\Http\Controllers\Api\StudentAuthController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::controller(StudentAuthController::class)->prefix('student')->group(function () {
+Route::controller(StudentAuthController::class)->prefix('auth/student')->group(function () {
 Route::post('register','register');
+Route::post('otp','otp');
+Route::post('resend-otp','resendOtp');
+Route::post('reset-password','resetPassword');
+Route::post('verify-code','verifyCode');
+Route::post('verify-reset-password','verifyResetPassword');
 Route::post('login','login');
 Route::post('logout','logout')->middleware('auth:sanctum');
+Route::delete('delete-account','delete')->middleware('auth:sanctum');
 });
 
 Route::controller(ContactController::class)->group(function () {
