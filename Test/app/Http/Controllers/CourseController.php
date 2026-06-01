@@ -5,16 +5,16 @@ namespace App\Http\Controllers;
 use App\Enums\Course\CourseDiscountTypeEnum;
 use App\Enums\Course\CourseDurationTypeEnum;
 use App\Http\Requests\StoreCourseRequest;
+use App\Http\Requests\UpdateCourseRequest;
 use App\Models\Course;
 use App\Models\CourseTypes;
 use App\Models\Teacher;
-use App\Services\StoreCourseService;
-use Illuminate\Http\Request;
+use App\Services\Course\CourseService;
 
 class CourseController extends Controller
 
 {
-    public function __construct(protected StoreCourseService $storeCourseService) {}
+    public function __construct(protected CourseService $courseService) {}
     /**
      * Display a listing of the resource.
      */
@@ -42,9 +42,8 @@ class CourseController extends Controller
     public function store(StoreCourseRequest $request)
     {
         $data = $request->validated();
-        $this->storeCourseService->insertCourse($data);
+        $this->courseService->create($data);
         return redirect()->route('courses.index')->with('success', 'Course created successfully.');
-
     }
 
     /**
@@ -60,14 +59,22 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        //
+        $teachers = Teacher::all();
+        $courseTypes = CourseTypes::all();
+        $durationTypes = CourseDurationTypeEnum::cases();
+        $discountTypes = CourseDiscountTypeEnum::cases();
+        return view('course.edit', compact('course', 'teachers', 'courseTypes', 'durationTypes', 'discountTypes'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Course $course)
+    public function update(UpdateCourseRequest $request, Course $course)
     {
+
+        $this->courseService->update($request->validated(),$course);
+        return redirect()->route('courses.index')->with('success', 'Course updated successfully.');
+
         //
     }
 
@@ -76,6 +83,7 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        //
+        $this->courseService->delete($course);
+        return redirect()->route('courses.index')->with('success', 'Course deleted successfully.');
     }
 }

@@ -39,9 +39,9 @@ class StoreCourseRequest extends FormRequest
             'teacher_id' => 'required|exists:teachers,id',
             'course_type_id' => 'required|exists:course_types,id',
 
-            'image' => 'nullable|image|max:2048',
+            'image' => 'required|image|max:2048',
 
-            'introduction_video' => 'nullable|mimes:mp4,mov,avi,wmv|max:10240',
+            'introduction_video' => 'required|mimes:mp4,mov,avi,wmv|max:10240',
         ];
     }
 }

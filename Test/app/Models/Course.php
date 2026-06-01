@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Course\CourseDiscountTypeEnum;
+use App\Enums\Course\CourseDurationTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
@@ -22,8 +23,9 @@ class Course extends Model
         'introduction_video',
     ];
     protected $casts = [
-    'discount_type' => CourseDiscountTypeEnum::class,
-];
+        'discount_type' => CourseDiscountTypeEnum::class,
+        'duration_type' => CourseDurationTypeEnum::class,
+    ];
 
     public function teacher()
     {
@@ -33,5 +35,10 @@ class Course extends Model
     public function courseType()
     {
         return $this->belongsTo(CourseTypes::class);
+    }
+
+    public function sessions()
+    {
+        return $this->hasMany(CourseSession::class);
     }
 }

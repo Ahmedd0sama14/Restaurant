@@ -69,6 +69,16 @@
 
                             </a>
 
+                        </li>  <li class="nav-item">
+
+                            <a href="{{ route('sessions.index') }}" class="nav-link active">
+
+                                <i class="nav-icon bi bi-speedometer"></i>
+
+                                <p>Sessions</p>
+
+                            </a>
+
                         </li>
                         <li class="nav-item">
 
