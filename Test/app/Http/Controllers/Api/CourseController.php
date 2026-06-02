@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\Course\CourseDiscountTypeEnum;
-use App\Enums\Course\CourseDurationTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
 use App\Http\Resources\CourseResource;
 use App\Models\Course;
 use App\Services\Course\CourseService;
+use App\Traits\RespondTrait;
+
 class CourseController extends Controller
 
 {
+    use RespondTrait;
     public function __construct(protected CourseService $CourseService) {}
     /**
      * Display a listing of the resource.
@@ -21,10 +22,7 @@ class CourseController extends Controller
     {
 
         $courses = Course::with('teacher', 'courseType')->paginate(6);
-        return response()->json([
-            "message" => "success",
-            "data" =>  CourseResource::collection($courses)
-        ]);
+        return $this->successResponse(CourseResource::collection($courses), 'success', 200);
     }
 
     /**
@@ -35,10 +33,7 @@ class CourseController extends Controller
         $data = $request->validated();
         $course=$this->CourseService->create($data);
 
-        return response()->json([
-            "message" => "success",
-            "data" =>  new CourseResource($course)
-        ]);
+        return $this->successResponse(new CourseResource($course), 'Course created successfully', 201);
     }
 
     /**
@@ -46,10 +41,8 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        return response()->json([
-            "message" => "success",
-            "data" =>  new CourseResource($course)
-        ]);
+        $course->load('teacher', 'courseType');
+        return $this->successResponse(new CourseResource($course), 'success', 200);
     }
 
 
@@ -61,14 +54,15 @@ class CourseController extends Controller
 
         $this->CourseService->update($request->validated(), $course);
 
-        return response()->json([
-            "message" => "success",
-            "data" =>  new CourseResource($course)
-        ]);
+        return $this->successResponse(new CourseResource($course), 'Course updated successfully', 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Course $course) {}
+    public function destroy(Course $course) {
+        $this->CourseService->delete($course);
+        return $this->successResponse(null, 'Course deleted successfully', 204);
+
+    }
 }

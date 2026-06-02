@@ -46,6 +46,8 @@ class StudentAuthController extends Controller
             now()->lessThan($user->otp_expires_at)
         ) {
             Auth::login($user);
+            $user->verify = 1;
+            $user->save();
 
             $user->resetOTP();
 

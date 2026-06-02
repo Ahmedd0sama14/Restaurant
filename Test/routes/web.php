@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\{AboutController, ContactController, HeaderController, TeacherController, CourseController, CourseSessionController};
+use App\Http\Controllers\AdminStudentController;
 use App\Http\Controllers\StudentAuthController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
@@ -30,3 +31,4 @@ Route::delete('/contacts/{contact}', [ContactController::class, 'destroy'])->nam
 Route::resource('teachers', TeacherController::class);
 Route::resource('courses', CourseController::class);
 Route::resource('sessions', CourseSessionController::class);
+Route::resource('students', AdminStudentController::class);

@@ -2,11 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StudentRegisterRequest extends FormRequest
+class UpdateAdminStudentRequest extends FormRequest
 {
 
 
@@ -19,9 +18,10 @@ class StudentRegisterRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $this->student->id],
             'phone' => ['required', 'string', 'max:255'],
-            'password' => ['required','min:8'],
+            'password' => ['nullable', 'string', 'min:8',],
+
         ];
     }
 }

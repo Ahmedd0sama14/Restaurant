@@ -10,7 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password', 'phone', 'otp', 'otp_expires_at'])]
+#[Fillable(['name', 'email', 'password', 'phone', 'otp', 'otp_expires_at','verify'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -32,7 +32,7 @@ class User extends Authenticatable
     public function generateOTP()
     {
         $this->otp = rand(100000, 999999);
-        $this->otp_expires_at = now()->addMinutes(10);
+        $this->otp_expires_at = now()->addMinutes(100);
         $this->save();
     }
     public function resetOTP()
@@ -40,5 +40,9 @@ class User extends Authenticatable
         $this->otp = null;
         $this->otp_expires_at = null;
         $this->save();
+    }
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 }
