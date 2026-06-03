@@ -5,24 +5,18 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TeacherResource;
 use App\Models\Teacher;
-use Illuminate\Http\Request;
+use App\Traits\RespondTrait;
 
 class TeacherController extends Controller
-{
+{ use RespondTrait;
     public function index()
     {
-        $teachers = Teacher::latest()->paginate(10);
-        return response()->json([
-            'message' => 'Teachers retrieved successfully.',
-            'data' => TeacherResource::collection($teachers)
-        ]);
+        $teachers = Teacher::latest()->with('documents')->paginate(10);
+        return $this->successResponse(TeacherResource::collection($teachers));
     }
     public function show (int $id)
     {
-        $teacher = Teacher::findOrFail($id);
-        return response()->json([
-            'message' => 'Teacher retrieved successfully.',
-            'data' => new TeacherResource($teacher)
-        ]);
+        $teacher = Teacher::with('documents')->findOrFail($id);
+        return $this->successResponse(new TeacherResource($teacher));
     }
 }

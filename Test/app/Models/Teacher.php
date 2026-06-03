@@ -13,4 +13,8 @@ class Teacher extends Model
         'password',
         'balance',
     ];
+    public function Documents()
+    {
+        return $this->hasMany(Document::class);
+    }
 }

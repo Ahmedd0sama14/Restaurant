@@ -1,8 +1,12 @@
 @extends('layouts.layouts')
 @title('Teachers List')
 @section('content')
-    <x-alert type="success" />
-    <x-alert type="error" />
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
     <div class="container mt-5">
         <h1>Teachers List</h1>
         <a href="{{ route('teachers.create') }}" class="btn btn-primary mb-3">Add New Teacher</a>
@@ -13,16 +17,21 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
+                    <th>Document</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($teachers as $teacher)
                     <tr>
-                        <td>{{ $teacher->id }}</td>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $teacher->name }}</td>
                         <td>{{ $teacher->email }}</td>
                         <td>{{ $teacher->phone }}</td>
+                        <td>
+                            <a href="{{ route('documents.index', ['teacher' => $teacher]) }}" class="btn btn-sm btn-info">Manage
+                                Documents</a>
+                        </td>
                         <td>
                             <a href="{{ route('teachers.show', $teacher) }}" class="btn btn-info">View</a>
                             <a href="{{ route('teachers.edit', $teacher) }}" class="btn btn-warning">Edit</a>

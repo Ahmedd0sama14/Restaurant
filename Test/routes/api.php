@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\{AboutController, ContactController, CourseTypesController, HeaderController, TeacherController};
+use App\Http\Controllers\Api\{AboutController, ContactController, CourseTypesController, ExamQuestionsController, HeaderController, TeacherController};
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\CourseSessionController;
 use App\Http\Controllers\Api\StudentAuthController;
@@ -34,3 +34,8 @@ Route::controller(TeacherController::class)->group(function () {
     Route::get('teachers/{id}', 'show');
 });
 Route::get('CoursesSessions', [CourseSessionController::class, 'index']);
+Route::controller(ExamQuestionsController::class)->group(function () {
+    Route::get('exams/questions', 'showall');
+    Route::get('exams/questions/{id}', 'show');
+
+});

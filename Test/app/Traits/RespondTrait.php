@@ -6,7 +6,7 @@ trait RespondTrait
 {
     public function successResponse($data = null, $message = 'Success', $code = 200)
     {
-         $response = [
+        $response = [
             'status' => 'success',
             'message' => $message,
         ];

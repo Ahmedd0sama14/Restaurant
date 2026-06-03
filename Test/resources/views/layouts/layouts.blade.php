@@ -138,6 +138,12 @@
                                 <p>Messages</p>
                             </a>
                         </li>
+                         <li class="nav-item">
+                            <a href="{{ route('teachers.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-people-fill"></i>
+                                <p>Teachers</p>
+                            </a>
+                        </li>
 
                         <li class="nav-item">
                             <a href="{{ route('students.index') }}" class="nav-link">
@@ -145,6 +151,13 @@
                                 <p>Students</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('exams.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-file-earmark-text-fill"></i>
+                                <p>Exams</p>
+                            </a>
+                        </li>
+
 
                         <li class="nav-item">
                             <a href="{{ route('sessions.index') }}" class="nav-link">
