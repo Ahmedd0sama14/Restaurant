@@ -138,6 +138,12 @@
                                 <p>Messages</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('bank-questions.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-people-fill"></i>
+                                <p>Quetions</p>
+                            </a>
+                        </li>
                          <li class="nav-item">
                             <a href="{{ route('teachers.index') }}" class="nav-link">
                                 <i class="nav-icon bi bi-people-fill"></i>
@@ -149,6 +155,12 @@
                             <a href="{{ route('students.index') }}" class="nav-link">
                                 <i class="nav-icon bi bi-people-fill"></i>
                                 <p>Students</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('subscriptions.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-people-fill"></i>
+                                <p>Subscriptions</p>
                             </a>
                         </li>
                         <li class="nav-item">

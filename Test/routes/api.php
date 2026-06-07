@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\{AboutController, ContactController, CourseTypesCon
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\CourseSessionController;
 use App\Http\Controllers\Api\StudentAuthController;
+use App\Http\Controllers\Api\StudentExamController;
+use App\Http\Controllers\Api\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -37,5 +39,10 @@ Route::get('CoursesSessions', [CourseSessionController::class, 'index']);
 Route::controller(ExamQuestionsController::class)->group(function () {
     Route::get('exams/questions', 'showall');
     Route::get('exams/questions/{id}', 'show');
-
+});
+Route::middleware('auth:sanctum')->controller(SubscriptionController::class)->prefix('students/sub')->group(function () {
+Route::post('/subscription', 'store');
+});
+Route::middleware('auth:sanctum')->controller(StudentExamController::class)->prefix('students/exams')->group(function () {
+Route::post('/exam', 'store');
 });

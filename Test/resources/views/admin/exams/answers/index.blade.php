@@ -1,13 +1,11 @@
 @extends('layouts.layouts')
 
 @section('title', 'Answers Management')
-
 @section('content')
     <a href="{{ route('answers.create', [$exam->id, $question->id]) }}" class="btn btn-primary btn-sm">
         + Add Answer
     </a>
     <div class="container mt-4">
-
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
                 <h4 class="mb-0">Answers</h4>

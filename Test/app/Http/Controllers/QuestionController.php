@@ -19,7 +19,7 @@ class QuestionController extends Controller
         $questions = $exam->questions()->with('answers')->withCount('answers')->paginate(3)->withQueryString();
         return view('admin.exams.question.index', compact('exam', 'questions'));
     }
-
+   
     /**
      * Show the form for creating a new resource.
      */

@@ -18,6 +18,7 @@ class StoreQuestionWithAnswersRequest extends FormRequest
     {
 
         return [
+            'exam_id' =>['nullable','integer'],
             'title' => ['required', 'string', 'max:255'],
             'degree' => ['required', 'numeric', 'min:1'],
             'answers' => ['required', 'array', 'min:2'],

@@ -23,88 +23,88 @@
 
         @csrf
 
-        <div class="mb-3">
-            <label class="form-label">Question Title</label>
+            <div class="mb-3">
+                <label class="form-label">Question Title</label>
 
-            <input
-                type="text"
-                name="title"
-                class="form-control"
-                required
-            >
-        </div>
+                <input
+                    type="text"
+                    name="title"
+                    class="form-control"
+                    required
+                >
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label">Degree</label>
+            <div class="mb-3">
+                <label class="form-label">Degree</label>
 
-            <input
-                type="number"
-                name="degree"
-                class="form-control"
-                required
-            >
-        </div>
+                <input
+                    type="number"
+                    name="degree"
+                    class="form-control"
+                    required
+                >
+            </div>
 
-        <hr>
+            <hr>
 
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4>Answers</h4>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4>Answers</h4>
 
-            <button
-                type="button"
-                class="btn btn-success"
-                id="add-answer"
-            >
-                + Add Answer
-            </button>
-        </div>
+                <button
+                    type="button"
+                    class="btn btn-success"
+                    id="add-answer"
+                >
+                    + Add Answer
+                </button>
+            </div>
 
-        <div id="answers-container">
+            <div id="answers-container">
 
-            <div class="answer-item card p-3 mb-3">
+                <div class="answer-item card p-3 mb-3">
 
-                <div class="row align-items-center">
+                    <div class="row align-items-center">
 
-                    <div class="col-md-1 text-center">
+                        <div class="col-md-1 text-center">
 
-                        <input
-                            type="radio"
-                            name="correct_answer"
-                            value="0"
-                            class="form-check-input"
-                            checked
-                        >
+                            <input
+                                type="radio"
+                                name="correct_answer"
+                                value="0"
+                                class="form-check-input"
+                                checked
+                            >
 
-                    </div>
+                        </div>
 
-                    <div class="col-md-9">
+                        <div class="col-md-9">
 
-                        <input
-                            type="text"
-                            name="answers[]"
-                            class="form-control"
-                            placeholder="Enter answer"
-                            required
-                        >
+                            <input
+                                type="text"
+                                name="answers[]"
+                                class="form-control"
+                                placeholder="Enter answer"
+                                required
+                            >
 
-                    </div>
+                        </div>
 
-                    <div class="col-md-2 text-end">
+                        <div class="col-md-2 text-end">
 
-                        <button
-                            type="button"
-                            class="btn btn-danger remove-answer"
-                        >
-                            X
-                        </button>
+                            <button
+                                type="button"
+                                class="btn btn-danger remove-answer"
+                            >
+                                X
+                            </button>
+
+                        </div>
 
                     </div>
 
                 </div>
 
             </div>
-
-        </div>
 
         <button type="submit" class="btn btn-primary">
             Save Question

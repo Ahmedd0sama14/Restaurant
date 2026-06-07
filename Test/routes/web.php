@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{AboutController, ContactController, HeaderController, TeacherController, CourseController, CourseSessionController};
+use App\Http\Controllers\{AboutController, BankQuestionController, ContactController, HeaderController, TeacherController, CourseController, CourseSessionController};
 use App\Http\Controllers\AdminStudentController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ExamController;
@@ -8,6 +8,8 @@ use App\Http\Controllers\QuestionAnswerController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\StudentAuthController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentExamController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(AboutController::class)->group(function () {
@@ -40,7 +42,6 @@ Route::resource('exams', ExamController::class);
 Route::get('/exams/{exam}/toggle', [ExamController::class, 'toggle'])->name('exams.toggle');
 Route::scopeBindings()->group(function () {
 Route::controller(QuestionController::class)->group(function () {
-
     Route::get('/exams/{exam}/questions', 'index')->name('questions.index');
     Route::get('/exams/{exam}/questions/create', 'create')->name('questions.create');
     Route::post('/exams/{exam}/questions', 'store')->name('questions.store');
@@ -66,5 +67,25 @@ Route::controller(DocumentController::class)->group(function () {
     Route::get('teachers/{teacher}/documents/{document}/edit', 'edit')->name('documents.edit');
     Route::put('teachers/{teacher}/documents/{document}', 'update')->name('documents.update');
     Route::delete('teachers/{teacher}/documents/{document}', 'destroy')->name('documents.destroy');
-
+});
+Route::controller(SubscriptionController::class)->group(function () {
+    Route::get('/subscriptions', 'index')->name('subscriptions.index');
+    Route::get('/subscriptions/{subscription}', 'show')->name('subscriptions.show');
+    Route::get('/subscriptions/changeStatus', 'edit')->name('subscriptions.changeStatus');
+    Route::put('/subscriptions/changeStatus/{subscription}', 'update')->name('subscriptions.update');
+    Route::delete('/subscriptions/{subscription}', 'destroy')->name('subscriptions.destroy');
+});
+Route::controller(BankQuestionController::class)->group(function () {
+    Route::get('/bank-questions', 'index')->name('bank-questions.index');
+    Route::get('/bank-questions/create', 'create')->name('bank-questions.create');
+    Route::post('/bank-questions', 'store')->name('bank-questions.store');
+    Route::get('/bank-questions/{question}', 'show')->name('bank-questions.show');
+    Route::get('/bank-questions/{question}/edit', 'edit')->name('bank-questions.edit');
+    Route::put('/bank-questions/{question}', 'update')->name('bank-questions.update');
+    Route::delete('/bank-questions/{question}', 'destroy')->name('bank-questions.destroy');
+});
+Route::controller(StudentExamController::class)->group(function () {
+    Route::get('/exams', 'index')->name('exams.index');
+    Route::get('/exams/{user}/exam/{exam}', 'userExamDetails')->name('exams.userExams');
+    Route::get('/exams/{exam}', 'show')->name('exams.show');
 });

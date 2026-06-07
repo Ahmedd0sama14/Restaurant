@@ -25,9 +25,6 @@
 
     </div>
 
-    {{-- Alerts --}}
-    <x-alert type="success" />
-    <x-alert type="error" />
 
     {{-- Courses Table --}}
     <div class="card border-0 shadow-sm">

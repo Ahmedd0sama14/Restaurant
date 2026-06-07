@@ -17,11 +17,12 @@ class UpdateQuestionWithAnswersRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'exam_id' =>['nullable','integer'],
             'title' => ['required', 'string', 'max:255'],
             'degree' => ['required', 'numeric', 'min:1'],
             'answers' => ['required', 'array', 'min:2'],
             'answers.*' => ['required', 'string', 'max:255'],
-            'correct_answer' => ['required', 'integer','min:1'],
+            'correct_answer' => ['required', 'integer'],
         ];
     }
 }
