@@ -3,9 +3,11 @@
 use App\Http\Controllers\{AboutController, BankQuestionController, ContactController, HeaderController, TeacherController, CourseController, CourseSessionController};
 use App\Http\Controllers\AdminStudentController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\EducationTypesController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\QuestionAnswerController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\StagesController;
 use App\Http\Controllers\StudentAuthController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentExamController;
@@ -84,8 +86,10 @@ Route::controller(BankQuestionController::class)->group(function () {
     Route::put('/bank-questions/{question}', 'update')->name('bank-questions.update');
     Route::delete('/bank-questions/{question}', 'destroy')->name('bank-questions.destroy');
 });
-Route::controller(StudentExamController::class)->group(function () {
-    Route::get('/exams', 'index')->name('exams.index');
+Route::controller(StudentExamController::class)->prefix('student-exams')->group(function () {
+    Route::get('/student-exams', 'index')->name('student-exams.index');
     Route::get('/exams/{user}/exam/{exam}', 'userExamDetails')->name('exams.userExams');
     Route::get('/exams/{exam}', 'show')->name('exams.show');
 });
+Route::resource('education-types', EducationTypesController::class);
+    Route::resource('EducationTypes.Stages', StagesController::class);

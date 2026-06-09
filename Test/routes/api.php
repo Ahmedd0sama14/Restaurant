@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\{AboutController, ContactController, CourseTypesController, ExamQuestionsController, HeaderController, TeacherController};
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\CourseSessionController;
+use App\Http\Controllers\Api\PartnerController;
 use App\Http\Controllers\Api\StudentAuthController;
 use App\Http\Controllers\Api\StudentExamController;
 use App\Http\Controllers\Api\SubscriptionController;
@@ -44,5 +45,5 @@ Route::middleware('auth:sanctum')->controller(SubscriptionController::class)->pr
 Route::post('/subscription', 'store');
 });
 Route::middleware('auth:sanctum')->controller(StudentExamController::class)->prefix('students/exams')->group(function () {
-Route::post('/exam', 'store');
-});
+Route::post('/exam', 'store');});
+Route::apiResource('partners', PartnerController::class);

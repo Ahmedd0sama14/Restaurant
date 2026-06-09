@@ -169,6 +169,18 @@
                                 <p>Exams</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('student-exams.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-file-earmark-text-fill"></i>
+                                <p>Student Exams</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('education-types.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-file-earmark-text-fill"></i>
+                                <p>Education Types</p>
+                            </a>
+                        </li>
 
 
                         <li class="nav-item">
