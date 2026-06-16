@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminMemberController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderMemberItemController;
 use App\Http\Controllers\RestaurantController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +35,15 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('restaurants.menu', MenuController::class);
     Route::resource('members', AdminMemberController::class);
     Route::resource('orders', OrderController::class);
-    });
+});
+Route::prefix('orders/{order}/order-members/{orderMember}/items')
+    ->controller(OrderMemberItemController::class)
+    ->name('order-members.items.')
+    ->group(function () {
 
-require __DIR__.'/settings.php';
+        Route::get('/create', 'create')->name('create');
+
+        Route::post('/', 'store')->name('store');
+
+        Route::delete('/{orderMemberItem}', 'destroy')->name('destroy');
+    });

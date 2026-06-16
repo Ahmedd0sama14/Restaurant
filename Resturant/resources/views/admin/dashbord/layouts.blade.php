@@ -126,6 +126,12 @@
                         <div>Restaurants</div>
                     </a>
                 </li>
+                 <li class="menu-item {{ request()->routeIs('admin.restaurants.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.orders.index') }}" class="menu-link">
+                        <i class="menu-icon bx bx-store"></i>
+                        <div>Orders</div>
+                    </a>
+                </li>
                 @yield('sidebar')
             </ul>
 
