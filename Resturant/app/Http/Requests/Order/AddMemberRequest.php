@@ -5,8 +5,9 @@ namespace App\Http\Requests\Order;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreOrderRequest extends FormRequest
+class AddMemberRequest extends FormRequest
 {
+
 
     /**
      * Get the validation rules that apply to the request.
@@ -16,14 +17,11 @@ class StoreOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'restaurant_id' =>['required','integer','exists:restaurants,id'],
-            'branch_id'=>['required','integer','exists:branches,id'],
-            'services'=>['required','integer'],
             'totalprice'=>['required','numeric'],
             'number_of_items'=>['required','numeric'],
             'number_of_members'=>['required','numeric','min:1'],
             'members'=>['required','array'],
-            'members.*.admin_id' =>['required','integer','exists:admins,id'],
+            'members.*.member_id'=>['required','integer','exists:admins,id'],
             'members.*.items'   => ['required', 'array', 'min:1'],
             'members.*.items.*.menu_id'   => ['required', 'integer', 'exists:menus,id'],
             'members.*.items.*.unit_price'  => ['required', 'numeric'],

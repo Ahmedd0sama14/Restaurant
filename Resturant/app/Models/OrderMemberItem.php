@@ -11,11 +11,14 @@ class OrderMemberItem extends Model
         'order_member_id',
         'menu_id',
         'price',
+        'quantity',
+        'pay_status',
     ];
     public function menu()
     {
         return $this->belongsTo(Menu::class);
     }
+
     public function order()
     {
         return $this->belongsTo(Order::class);

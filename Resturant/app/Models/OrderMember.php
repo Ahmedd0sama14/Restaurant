@@ -23,8 +23,10 @@ class OrderMember extends Model
     {
         return $this->hasMany(OrderMemberItem::class);
     }
-    public function getTotalAttribute()
-    {
-        return $this->items->sum('price');
-    }
+       public function getTotalPriceAttribute()
+{
+    return $this->items->sum(function ($item) {
+        return $item->price * $item->quantity;
+    });
+}
 }

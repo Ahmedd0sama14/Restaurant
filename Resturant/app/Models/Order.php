@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Order\OrderPayEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -11,8 +12,16 @@ class Order extends Model
         'branch_id',
         'totalprice',
         'number_of_members',
-        'number_of_items'
+        'number_of_items',
+        'services',
+        'pay_status'
     ];
+
+    protected $casts = [
+      'pay_status'=>OrderPayEnum::class
+    ];
+
+
     public function restaurant()
     {
         return $this->belongsTo(Restaurant::class);

@@ -10,7 +10,6 @@
 <title>@yield('title', 'Dashboard')</title>
 
 <link rel="icon" href="{{ asset('assets/img/favicon/favicon.ico') }}">
-
 <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/boxicons.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendor/css/core.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendor/css/theme-default.css') }}">
@@ -66,6 +65,13 @@
     .footer {
         border-top: 1px solid #e5e7eb;
     }
+    /* تلوين الخيارات المعطلة داخل السيلكت */
+    select option:disabled {
+        color: #a94442 !important; /* لون نص أحمر داكن */
+        background-color: #f2dede !important; /* خلفية حمراء خفيفة */
+        font-style: italic; /* جعل الخط مائل */
+    }
+
 </style>
 
 @stack('styles')

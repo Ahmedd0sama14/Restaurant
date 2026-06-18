@@ -47,3 +47,9 @@ Route::prefix('orders/{order}/order-members/{orderMember}/items')
 
         Route::delete('/{orderMemberItem}', 'destroy')->name('destroy');
     });
+    Route::put('/admin/orders/{order}/items/{item}',
+     [OrderMemberItemController::class, 'update'])
+     ->name('order-members.items.update');
+Route::delete('/admin/orders/{order}/members/{orderMember}',[OrderMemberItemController::class, 'deleteMenber'])->name('order.members.destroy');
+Route::get('order/members/{order}',[OrderController::class, 'createMember'])->middleware('admin')->name('order.members.create');
+Route::post('order/members/{order}',[OrderController::class, 'storeMember'])->middleware('admin')->name('order.members.store');
