@@ -97,7 +97,7 @@ class OrderMemberItemController extends Controller
         }
         return redirect()->route('admin.orders.show', [$order])->with('success', 'Item deleted successfully');
     }
-    public function deleteMenber(Order $order, OrderMember $orderMember)
+    public function deleteMember(Order $order, OrderMember $orderMember)
     {
        $memberTotalPrice = $orderMember->items->sum(fn ($item) => $item->price * $item->quantity);
        $quantity = $orderMember->items->sum(fn ($item) => $item->quantity);

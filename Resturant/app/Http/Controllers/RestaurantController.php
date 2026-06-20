@@ -68,7 +68,14 @@ class RestaurantController extends Controller
      */
     public function show(Restaurant $restaurant)
     {
-        $restaurant->load('images', 'branches', 'menus');
+        $restaurant->load([
+            'images',
+            'branches',
+            'menus' => function ($query) {
+                $query->latest()->take(5);
+            },
+        ]);
+        $restaurant->loadCount('branches', 'menus');
         return view('admin.restaurants.show', compact('restaurant'));
     }
 

@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Menu\AddExcelMenuRequest;
 use App\Http\Requests\Menu\StoreMenuRequest;
 use App\Http\Requests\Menu\UpdateMenuRequest;
+use App\Imports\MenuImport;
 use App\Models\Menu;
 use App\Models\Restaurant;
 use App\Services\FileService;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MenuController extends Controller
 {
@@ -17,8 +21,8 @@ class MenuController extends Controller
      */
     public function index(Restaurant $restaurant)
     {
-        $restaurant->load('menus');
-        return view('admin.menu.index',compact('restaurant'));
+        $menus = $restaurant->menus()->latest()->paginate(10);
+        return view('admin.menu.index',compact('menus','restaurant'));
     }
 
     /**
@@ -39,8 +43,6 @@ class MenuController extends Controller
         $data['image'] = $this->fileService->handleFile($request->file('image'),null, 'menus');
         Menu::create($data);
         return redirect()->route('admin.restaurants.show', $restaurant);
-
-
     }
 
     /**
@@ -73,5 +75,18 @@ class MenuController extends Controller
         $this->fileService->deleteOldFile($menu->image);
         $menu->delete();
         return redirect()->route('admin.restaurants.show', $restaurant);
+    }
+    public function importmenu(AddExcelMenuRequest $request,Restaurant $restaurant)
+    {
+
+        try {
+            Excel::import(new MenuImport($restaurant->id), $request->file('excel_file'),null, \Maatwebsite\Excel\Excel::XLSX);
+            return redirect()->route('admin.restaurants.show', $restaurant)->with('success', 'Menu imported successfully');
+
+        }
+        catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
     }
 }
