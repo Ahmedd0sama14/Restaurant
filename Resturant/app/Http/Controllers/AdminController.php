@@ -71,11 +71,17 @@ class AdminController extends  Controller
         $credentials = $request->only('email', 'password');
         if (Auth::guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
+            if(Auth::guard('admin')->user()->role == AdminTypeEnum::ADMIN){
+                return redirect()->intended(route('admin.dashboard'));
+            }
+            else{
+                return redirect()->intended(route('user.dashbord'));
+            }
+
             return redirect()->intended(route('admin.dashboard'));
         }
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+            'email' => 'The provided credentials do not match our records.'])->onlyInput('email');
     }
     public function logout()
     {

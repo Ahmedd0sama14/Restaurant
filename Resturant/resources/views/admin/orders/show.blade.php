@@ -49,26 +49,24 @@
 
             <hr class="my-4 text-light">
 
-
-
             <h6 class="fw-bold mb-3 text-primary"><i class="bx bx-calculator me-1"></i> Financial Summary</h6>
             <div class="row g-3">
                 <div class="col-md-4">
                     <div class="p-3 border rounded bg-light">
-                        <span class="text-muted d-block small fw-bold">Items Total (إجمالي سعر الأكل)</span>
-                        <span class="fs-5 fw-bold text-secondary">{{ number_format($order->totalprice - $order->services, 2) }} EGP</span>
+                        <span class="text-muted d-block small fw-bold">Items Total</span>
+                        <span class="fs-5 fw-bold text-secondary">{{ number_format($order->totalprice - ($order->services ?? 0), 2) }} EGP</span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="p-3 border rounded bg-light">
-                        <span class="text-muted d-block small fw-bold">Delivery Service (سيرفس التوصيل)</span>
-                        <span class="fs-5 fw-bold text-warning">+ {{ number_format($order->services) }} EGP</span>
+                        <span class="text-muted d-block small fw-bold">Services</span>
+                        <span class="fs-5 fw-bold text-warning">+ {{ number_format($order->services ?? 0) }} EGP</span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="p-3 border rounded" style="background-color: #e8f5e9;">
-                        <span class="text-success d-block small fw-bold">Grand Total (الإجمالي الكلي المضاف له السيرفس)</span>
-                        <span class="fs-4 fw-black text-success">{{ number_format($order->totalprice ) }} EGP</span>
+                        <span class="text-success d-block small fw-bold">Grand Total</span>
+                        <span class="fs-4 fw-bold text-success">{{ number_format($order->totalprice ?? 0) }} EGP</span>
                     </div>
                 </div>
             </div>
@@ -77,31 +75,11 @@
 
     {{-- MEMBERS SECTION --}}
     <div class="d-flex align-items-center mb-3 mt-5">
-        <h5 class="mb-0 fw-bold text-dark"><i class="bx bx-group text-success me-1"></i> Order Members Items</h5>
+        <h5 class="mb-0 fw-bold text-dark"><i class="bx bx-group text-success me-1"></i> Order Members</h5>
         <span class="badge bg-secondary rounded-pill ms-2">{{ $order->members->count() }}</span>
     </div>
-    <div class="card border-0 shadow-sm mb-4">
-    <div class="card-body d-flex justify-content-between align-items-center">
-        <div>
-            <h5 class="mb-0 fw-bold">
-                <i class="bx bx-group text-success"></i>
-                Order Members
-            </h5>
-            <small class="text-muted">
-                Manage order members and their items
-            </small>
-        </div>
-
-        <a href="{{ route('order.members.create', $order) }}"
-           class="btn btn-success">
-            <i class="bx bx-user-plus"></i>
-            Add New Member
-        </a>
-    </div>
-</div>
 
     @foreach ($order->members as $member)
-
         <div class="card mb-4 border-0 shadow-sm overflow-hidden">
             <div class="card-header bg-light d-flex flex-wrap justify-content-between align-items-center gap-3 py-3 border-bottom">
                 <h6 class="mb-0 fw-bold text-dark fs-6 d-flex align-items-center">
@@ -111,14 +89,15 @@
 
                 <div class="d-flex flex-wrap align-items-center gap-2">
                     <span class="badge bg-success fs-6 px-3 py-2">
-                        Total: {{ number_format($member->total_price, 2) }} EGP
+                        Total: {{ number_format($member->total_price ?? $member->items->sum(fn($i) => $i->quantity * ($i->unit_price ?? $i->price)), 2) }} EGP
                     </span>
 
                     <a href="{{ route('order-members.items.create', [$order, $member]) }}" class="btn btn-success btn-sm px-2">
                         <i class="bx bx-plus"></i> Add Item
                     </a>
 
-                    <form action="{{ route('order.members.destroy',[$order, $member,] ?? '') }}" method="POST" onsubmit="return confirm('Delete this member and all his items?')" class="d-inline">
+                    <form action="{{ route('order.members.destroy', [$order, $member]) }}" method="POST"
+                          onsubmit="return confirm('Delete this member and all his items?')" class="d-inline">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-outline-danger btn-sm px-2">
@@ -136,7 +115,7 @@
                                 <th class="ps-4">Menu Item</th>
                                 <th>Unit Price</th>
                                 <th width="160">Quantity</th>
-                                <th>Total Price (السعر)</th>
+                                <th>Total Price</th>
                                 <th width="100" class="text-center pe-4">Action</th>
                             </tr>
                         </thead>
@@ -144,12 +123,13 @@
                             @forelse($member->items as $item)
                                 <tr>
                                     <td class="ps-4 fw-medium text-dark">
-                                        {{ $item->menu?->item ?? ($item->menu?->title ?? 'Deleted Item') }}
+                                        {{ $item->menu?->item ?? $item->menu?->title ?? 'Deleted Item' }}
                                     </td>
-                                    <td>{{ number_format($item->price, 2) }} EGP</td>
+                                    <td>{{ number_format($item->unit_price ?? $item->price, 2) }} EGP</td>
                                     <td>
                                         <div class="quantity-container d-flex align-items-center"
-                                             data-order-id="{{ $order->id }}" data-member-id="{{ $member->id }}"
+                                             data-order-id="{{ $order->id }}"
+                                             data-member-id="{{ $member->id }}"
                                              data-item-id="{{ $item->id }}">
 
                                             <div class="d-flex align-items-center gap-2 quantity-display-wrapper">
@@ -161,15 +141,12 @@
                                                 </button>
                                             </div>
 
-                                            <form action="{{ route('order-members.items.update', [$order, $item]) }}"
-                                                  method="POST"
-                                                  class="quantity-edit-form d-none input-group input-group-sm">
+                                            <form action="{{ route('order-members.items.update', [$order, $member, $item]) }}"
+                                                  method="POST" class="quantity-edit-form d-none input-group input-group-sm">
                                                 @csrf
                                                 @method('PUT')
-
                                                 <input type="number" name="quantity" value="{{ $item->quantity ?? 1 }}"
                                                        min="1" class="form-control text-center px-1" style="max-width: 65px;">
-
                                                 <button type="submit" class="btn btn-success px-2">
                                                     <i class="bx bx-check"></i>
                                                 </button>
@@ -180,7 +157,7 @@
                                         </div>
                                     </td>
                                     <td class="text-dark fw-bold">
-                                        {{ number_format($item->price * $item->quantity, 2) }} EGP
+                                        {{ number_format(($item->unit_price ?? $item->price) * $item->quantity, 2) }} EGP
                                     </td>
                                     <td class="text-center pe-4">
                                         <form action="{{ route('order-members.items.destroy', [$order, $member, $item]) }}"
@@ -210,24 +187,21 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-
-            // Show Edit Form Mode
-            $(document).on('click', '.edit-btn', function() {
-                let container = $(this).closest('.quantity-container');
-                container.find('.quantity-display-wrapper').addClass('d-none');
-                container.find('.quantity-edit-form').removeClass('d-none').addClass('d-flex');
-                container.find('input[name="quantity"]').focus().select();
-            });
-
-            // Cancel Edit Mode
-            $(document).on('click', '.cancel-edit', function() {
-                let container = $(this).closest('.quantity-container');
-                container.find('.quantity-display-wrapper').removeClass('d-none');
-                container.find('.quantity-edit-form').addClass('d-none').removeClass('d-flex');
-            });
-
+<script>
+    $(document).ready(function() {
+        // Edit Quantity
+        $(document).on('click', '.edit-btn', function() {
+            let container = $(this).closest('.quantity-container');
+            container.find('.quantity-display-wrapper').addClass('d-none');
+            container.find('.quantity-edit-form').removeClass('d-none').addClass('d-flex');
+            container.find('input[name="quantity"]').focus().select();
         });
-    </script>
+        // Cancel Edit
+        $(document).on('click', '.cancel-edit', function() {
+            let container = $(this).closest('.quantity-container');
+            container.find('.quantity-display-wrapper').removeClass('d-none');
+            container.find('.quantity-edit-form').addClass('d-none').removeClass('d-flex');
+        });
+    });
+</script>
 @endpush

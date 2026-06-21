@@ -63,7 +63,7 @@
                                             View
                                         </a>
 
-                                        <a href="#" class="btn btn-success btn-sm">
+                                        <a href="{{ route('order.member.create', ['order' => $order]) }}" class="btn btn-success btn-sm">
                                             <i class="bx bx-plus"></i>
                                             Add Item
                                         </a>
@@ -79,6 +79,12 @@
                                                 Delete
                                             </button>
                                         </form>
+
+                                        <a href="{{ route('admin.orders.Details', $order->id) }}" class="btn btn-info btn-sm">
+                                            <i class="bx bx-show"></i>
+                                             Invoice 
+                                        </a>
+
 
                                     </div>
                                 </td>

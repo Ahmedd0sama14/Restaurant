@@ -46,7 +46,7 @@ class OrderController extends Controller
         try {
             $members = $data['members'];
             unset($data['members']);
-            $data['totalprice']+=$data['services'];
+            $data['totalprice'] += $data['services'];
             $order = Order::create($data);
             foreach ($members as $member) {
                 $orderMember = OrderMember::create([
@@ -92,11 +92,11 @@ class OrderController extends Controller
     public function createMember(Order $order)
     {
         $users = Admin::where('role', AdminTypeEnum::MEMBER)
-        ->whereNotIn('id', $order->members()->pluck('admin_id'))->get();
+            ->whereNotIn('id', $order->members()->pluck('admin_id'))->get();
         $order->load('restaurant.menus');
-       if(!$users->count()){
-        return redirect()->route('admin.orders.show', [$order])->with('error', 'No more members available');
-       }
+        if (!$users->count()) {
+            return redirect()->route('admin.orders.show', [$order])->with('error', 'No more members available');
+        }
         return view('admin.orders.create-member', compact('order', 'users'));
     }
     public function storeMember(AddMemberRequest $request, Order $order)
@@ -104,38 +104,42 @@ class OrderController extends Controller
 
         $data = $request->validated();
         DB::beginTransaction();
-        try
-        {
-         $members = $data['members'];
-        $order->update([
-            'totalprice' => $order->totalprice + $data['totalprice'],
-            'number_of_items' => $order->number_of_items + $data['number_of_items'],
-            'number_of_members'=>$order->number_of_members+$data['number_of_members'],
-        ]);
-        foreach ($members as $member) {
+        try {
+            $members = $data['members'];
+            $order->update([
+                'totalprice' => $order->totalprice + $data['totalprice'],
+                'number_of_items' => $order->number_of_items + $data['number_of_items'],
+                'number_of_members' => $order->number_of_members + $data['number_of_members'],
+            ]);
+            foreach ($members as $member) {
+                $adminId = $member['member_id'];
+                $memberexists = $order->members()->where('admin_id', $adminId)->first();
+                if ($memberexists) {
+                    $orderMember = $memberexists;
+                }
+                else {
+                 $orderMember = OrderMember::create([
+                    'order_id' => $order->id,
+                    'admin_id' => $member['member_id'],
+                ]);
+                }
+                foreach ($member['items'] as $menuItem) {
 
-    $orderMember = OrderMember::create([
-        'order_id' => $order->id,
-        'admin_id' => $member['member_id'],
-    ]);
-    foreach ($member['items'] as $menuItem) {
-
-        OrderMemberItem::create([
-            'order_id'        => $order->id,
-            'order_member_id' => $orderMember->id,
-            'menu_id'         => $menuItem['menu_id'],
-            'price'           => $menuItem['unit_price'],
-            'quantity'        => $menuItem['quantity'],
-        ]);
-    }}
+                    OrderMemberItem::create([
+                        'order_id'        => $order->id,
+                        'order_member_id' => $orderMember->id,
+                        'menu_id'         => $menuItem['menu_id'],
+                        'price'           => $menuItem['unit_price'],
+                        'quantity'        => $menuItem['quantity'],
+                    ]);
+                }
+            }
             DB::commit();
             return redirect()->route('admin.orders.index')->with('success', 'Order Updated successfully');
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
-
         }
-
     }
 
     /**
@@ -146,4 +150,21 @@ class OrderController extends Controller
         $order->delete();
         return redirect()->route('admin.orders.index')->with('success', 'Order deleted successfully');
     }
-}
+ public function Details(Order $order)
+{
+    $order->load([ 'restaurant','branch']);
+
+    $items = $order->members->flatMap->items
+        ->groupBy('menu_id')->map(function ($items) {
+             $firstItem = $items->first();
+            return [
+                'name' => $firstItem->menu->item,
+                'quantity' => $items->sum('quantity'),
+                'price' => $firstItem->price,
+                'total' => $firstItem->price * $items->sum('quantity'),
+            ];
+        });
+
+
+    return view('admin.orders.Details',compact('order', 'items'));
+}}

@@ -169,24 +169,17 @@
                             <a class="nav-link dropdown-toggle hide-arrow"
                                href="javascript:void(0);"
                                data-bs-toggle="dropdown">
-
-                                <img src="{{ asset('assets/img/avatars/1.png') }}"
-                                     class="user-avatar">
+                                <img src="{{ asset('assets/img/avatars/1.png') }}" class="user-avatar">
                             </a>
-
                             <ul class="dropdown-menu dropdown-menu-end">
-
                                 <li>
                                     <div class="dropdown-item-text">
-
                                         <div class="fw-semibold">
                                             {{ auth('admin')->user()->name }}
                                         </div>
-
                                         <small class="text-muted">
                                             Administrator
                                         </small>
-
                                     </div>
                                 </li>
 

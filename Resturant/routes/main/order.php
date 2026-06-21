@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 
-        Route::resource('orders', OrderController::class);
+     Route::resource('orders', OrderController::class);
+     Route::get('orders/{order}/Details',[OrderController::class, 'Details'])->name('orders.Details');
      Route::resource('members', AdminMemberController::class);
 
 
