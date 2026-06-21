@@ -23,7 +23,6 @@ class MenuImport implements ToModel
             'restaurant_id' => $this->resturantId,
             'item' => $row[0],
             'price' => floatval($row[1]),
-            'image' => $row[2],
         ]);
     }
 }
